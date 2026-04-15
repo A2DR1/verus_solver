@@ -58,7 +58,10 @@
       "Bash(python3 -m verus_solver.bench.run_bench --tasks-dir /Users/austinshen/Documents/Umich/2026Winter/EECS498_programSynthesis/verus-proof-synthesis/verus_solver_bench --config verus_solver/config.local.yaml --out-dir /tmp/verus_bench_no_recipes)",
       "Bash(tee /tmp/bench_no_recipes.log)",
       "Bash(awk '{print \"running PID=\"$2}')",
-      "Bash(awk '{print \"PID=\"$2, \"elapsed=\"$10}')"
+      "Bash(awk '{print \"PID=\"$2, \"elapsed=\"$10}')",
+      "Bash(cargo build:*)",
+      "Bash(python3 scripts/pipeline.py --bench benchmark0 --verbose)",
+      "Bash(python3 scripts/pipeline.py --bench benchmark0)"
     ]
   }
 }
