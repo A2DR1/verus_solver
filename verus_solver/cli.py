@@ -4,6 +4,14 @@ import subprocess
 import sys
 from pathlib import Path
 
+# Load a .env file from the repo root (or any parent directory) before anything
+# else runs, so OPENAI_API_KEY and friends are available to LLMFallback.
+try:
+    from dotenv import find_dotenv, load_dotenv
+    load_dotenv(find_dotenv(usecwd=True), override=True)
+except ImportError:
+    pass  # python-dotenv is optional; fall back to environment as-is
+
 from .checkpoint import CheckpointStore
 from .config import SolverConfig
 from .solver import VerifierGuidedSolver

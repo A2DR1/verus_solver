@@ -4,6 +4,12 @@ import json
 from pathlib import Path
 from time import perf_counter
 
+try:
+    from dotenv import find_dotenv, load_dotenv
+    load_dotenv(find_dotenv(usecwd=True), override=True)
+except ImportError:
+    pass
+
 from verus_solver.config import SolverConfig
 from verus_solver.solver import VerifierGuidedSolver
 from verus_solver.verus_runner import VerusRunner
