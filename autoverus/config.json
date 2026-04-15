@@ -1,18 +1,16 @@
 {
-    "use_openai": false,
+    "use_openai": true,
     "aoai_api_base": [
-        "<Your LLM API EndPoint>"
+        "https://api.openai.com/v1/"
     ],
-    "aoai_api_version": "<Your LLM model version>",
-    "aoai_api_key": [
-        "<Your LLM API Key>"
-    ],
+    "aoai_api_version": "2024-12-01-preview",
+    "aoai_api_key": [],
     "aoai_max_retries": 5,
-    "max_token": 2048,
+    "max_token": 4096,
     "aoai_generation_model": "gpt-4o",
     "aoai_debug_model": "gpt-4o",
-    "verus_path": "<Absolute path to your verus, like C:\\Verus\\source\\target-verus\\release\\verus.exe>",
-    "example_path": "<Absolute path to example folder, like C:\\verus-proof-synthesis\\code\\examples>",
-    "lemma_path": "<Absolute path to lemma folder>, like C:\\verus-proof-synthesis\\code\\lemmas",
-    "util_path": "<Absolute path to util folder, like C:\\verus-proof-synthesis\\utils>"
+    "verus_path": "/absolute/path/to/verus/source/target-verus/release/verus",
+    "example_path": "/absolute/path/to/verus-proof-synthesis/autoverus/examples",
+    "lemma_path": "/absolute/path/to/verus-proof-synthesis/autoverus/lemmas",
+    "util_path": "/absolute/path/to/verus-proof-synthesis/utils"
 }

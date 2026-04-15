@@ -20,6 +20,18 @@ class AttrDict(dict):
         return self[name]
 
 
+def load_config(path):
+    """Load JSON config; merge config.local.json from the same directory if present (for secrets)."""
+    with open(path) as f:
+        config = json.load(f)
+    base_dir = os.path.dirname(os.path.abspath(path))
+    local_path = os.path.join(base_dir, "config.local.json")
+    if os.path.isfile(local_path):
+        with open(local_path) as f:
+            config.update(json.load(f))
+    return config
+
+
 def remove_comment(code):
     """
     remove single-line comments in code

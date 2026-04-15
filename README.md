@@ -7,161 +7,114 @@
     <a href="https://microsoft.github.io/verus-proof-synthesis/"><img src="https://img.shields.io/badge/🏆_Leaderboard-View_Results-6366f1.svg?style=for-the-badge"></a>
 </p>
 
-This repository contains code and artifacts for automated [Verus](https://github.com/verus-lang/verus) proof synthesis using LLM-based approaches. It includes two proof synthesis systems and two benchmark suites.
+This repository contains tools and benchmarks for automated [Verus](https://github.com/verus-lang/verus) proof synthesis. The main addition for interactive, verifier-guided repair is **`verus_solver`**; the upstream research systems **AutoVerus** and **VeruSAGE** and their benchmarks live alongside it.
 
-> 🏆 **[View the Leaderboard](leaderboard)** — Compare proof synthesis systems on our benchmarks!
-
----
-
-## � Repository Contents
-
-| System | Description | Benchmark |
-|--------|-------------|-----------|
-| **[AutoVerus](#-autoverus)** | Proof synthesis for small algorithmic code | **[Verus-Bench](#verus-bench)** (150 tasks) |
-| **[VeruSAGE](#-verusage)** | Proof synthesis for code in large system projects | **[VeruSAGE-Bench](#verusage-bench)** (849 tasks) |
+> **[Leaderboard](leaderboard)** — Compare systems on the published benchmarks.
 
 ---
 
-## <img src="assets/autoverus-logo.png" alt="AutoVerus" width="30" /> AutoVerus
+## Verifier-guided solver (`verus_solver`)
 
-**AutoVerus** uses a three-phase approach to generate formal proofs for Rust programs:
-1. **Inference** - Generate initial proof candidates using few-shot examples
-2. **Refinement** - Refine promising candidates with targeted improvements
-3. **Repair** - Debug and fix remaining verification errors
+A standalone Python CLI that loops on **Verus output**: it triages errors, applies deterministic repair strategies, rotates strategies when progress stalls, and optionally calls an LLM for patches. See **[verus_solver/README.md](verus_solver/README.md)** for install, config, and commands.
 
-![AutoVerus Framework](assets/autoverus-framework.png)
+```bash
+pip install -r requirements.txt
+cp verus_solver/config.local.example.yaml verus_solver/config.local.yaml
+# Edit verus_solver/config.local.yaml: set verus_path, optional OPENAI_API_KEY for LLM fallback
 
-### Quick Start
+python3 -m verus_solver.cli solve path/to/file.rs --out path/to/out.rs --config verus_solver/config.local.yaml
+```
+
+**Config notes**
+
+- Point `verus_path` at a Verus binary (official release builds work well).
+- Set `OPENAI_API_KEY` in your environment if `use_llm_fallback: true`.
+
+---
+
+## AutoVerus (upstream)
+
+**AutoVerus** is a three-phase LLM pipeline (inference → refinement → repair) for small algorithmic Verus programs. Implementation and few-shot examples are under **`autoverus/`**.
 
 ```bash
 cd autoverus
-python main.py --input <input_file.rs> --output <output_file.rs> --config config.json
+python3 main.py --config config.json --input examples/input-condinv/ex1.rs --output /tmp/out.rs
 ```
 
-👉 **[AutoVerus Documentation](autoverus/README.md)**
+Details: **[autoverus/README.md](autoverus/README.md)**.  
+Artifact reproduction: **[README-artifact-evaluation.md](README-artifact-evaluation.md)**.
 
 ---
 
-## <img src="assets/verusage-logo.png" alt="VeruSAGE" width="30" /> VeruSAGE
+## VeruSAGE (upstream)
 
-**VeruSAGE** is an LLM-powered agentic framework that excels at complex systems verification with an observation-reasoning-action loop.
-
-![VeruSAGE Framework](assets/verusage-framework.png)
-
-### Quick Start
+**VeruSAGE** targets larger systems-style verification with an agent loop. Code is under **`verusage/`**.
 
 ```bash
 cd verusage
-python main.py --config config.json --input your_file.rs --output repaired_file.rs
+python3 main.py --config config.json --input your_file.rs --output repaired_file.rs
 ```
 
-👉 **[VeruSAGE Documentation](verusage/README.md)**
+Details: **[verusage/README.md](verusage/README.md)**.
 
 ---
 
-## 📊 Benchmarks
+## Benchmarks
 
-### Verus-Bench
-
-**150 algorithm-level verification tasks** from classic CS problems.
-
-| Source | Tasks | Description |
-|--------|-------|-------------|
-| CloverBench | 11 | Classic CS examples |
-| MBPP | 78 | Formal specification problems |
-| Diffy | 38 | Array/loop programs |
-| Misc | 23 | Verus tutorial examples |
-
-👉 **[Verus-Bench README](benchmarks/Verus-Bench/README.md)**
-
-### VeruSAGE-Bench
-
-**849 repository-level verification tasks** from real-world systems projects.
-
-| Project | Tasks | Domain |
-|---------|-------|--------|
-| Anvil (AL) | 104 | Distributed Systems |
-| Anvil-Advanced (AC) | 63 | Distributed Systems |
-| IronKV (IR) | 118 | Key-Value Store |
-| Memory Allocator (MA) | 89 | Systems |
-| Node Replication (NO) | 29 | Distributed Systems |
-| NRKernel (NR) | 204 | OS Kernel |
-| ATMO (OS) | 157 | Microkernel |
-| Storage (ST) | 63 | Storage Systems |
-| Vest (VE) | 22 | Serialization |
-
-👉 **[VeruSAGE-Bench README](benchmarks/VeruSAGE-Bench/README.md)**
+| Suite | Size | README |
+|-------|------|--------|
+| Verus-Bench | 150 algorithmic tasks | [benchmarks/Verus-Bench/README.md](benchmarks/Verus-Bench/README.md) |
+| VeruSAGE-Bench | 849 systems tasks | [benchmarks/VeruSAGE-Bench/README.md](benchmarks/VeruSAGE-Bench/README.md) |
 
 ---
 
-## 🚀 Installation
+## Installation (shared)
 
-### Docker (Recommended)
+### Docker
 
 ```bash
 docker build -t verus-proof-synthesis .
 docker run -it verus-proof-synthesis
 ```
 
-### Local Setup
+### Local prerequisites
 
-**Prerequisites:**
 - Python 3.10+
-- [Verus](https://github.com/verus-lang/verus) (see version requirements below)
-- OpenAI or Azure OpenAI API key
+- A [Verus](https://github.com/verus-lang/verus) binary (build from source or use a [release](https://github.com/verus-lang/verus/releases))
+- For LLM-based tools: `OPENAI_API_KEY` (or Azure config where documented in each subproject)
 
-```bash
-# Clone repository
-git clone https://github.com/microsoft/verus-proof-synthesis.git
-cd verus-proof-synthesis
+**Building Verus from source** (abbreviated; see upstream `BUILD.md`):
 
-# Install dependencies
-pip install -r requirements.txt
-
-# Set API key
-export OPENAI_API_KEY=<your-openai-api-key>
-```
-
-**Verus Installation:**
 ```bash
 git clone https://github.com/verus-lang/verus.git
-cd verus
-git checkout 33269ac6a0ea33a08109eefe5016c1fdd0ce9fbd  # For Verus-Bench
-# git checkout ddc66116aa7a844a9e19cc50922fe85c84b8b4a5  # For VeruSAGE-Bench
-./tools/get-z3.sh && source tools/activate
+cd verus/source
+./tools/get-z3.sh && source ../tools/activate
 vargo build --release
+# Binary typically at: verus/source/target-verus/release/verus
 ```
 
 ---
 
-## 📁 Directory Structure
+## Repository layout
 
 ```
 verus-proof-synthesis/
-├── autoverus/          # AutoVerus implementation
-│   ├── main.py         # Single-file proof generation
-│   ├── verify.py       # Batch benchmarking tool
-│   └── examples/       # Few-shot training examples
-├── verusage/           # VeruSAGE implementation
-│   ├── main.py         # Single-file repair
-│   ├── run_batch.py    # Batch processing
-│   └── agents/         # Agent framework
-├── benchmarks/
-│   ├── Verus-Bench/    # 150 algorithm tasks
-│   └── VeruSAGE-Bench/ # 849 systems tasks
-├── utils/lynette/      # Verus parser for proof synthesis
-└── generated/          # Pre-generated proof results
+├── verus_solver/       # Verifier-guided solver (CLI, strategies, bench harness)
+├── autoverus/          # AutoVerus: inference / refinement / repair
+├── verusage/           # VeruSAGE: agentic repair
+├── benchmarks/         # Verus-Bench, VeruSAGE-Bench
+├── utils/              # Shared helpers (e.g. Lynette parser)
+├── my_inputs/          # Local example inputs (optional)
+└── generated/          # Pre-generated / experiment outputs
 ```
 
 ---
 
-## 📚 Further Reading
+## Further reading
 
-- **AutoVerus Paper**: [arXiv:2409.13082](https://arxiv.org/abs/2409.13082)
-- **VeruSAGE Paper**: [arXiv:2512.18436](https://arxiv.org/abs/2512.18436)
-- **Project Website**: [website](https://www.microsoft.com/en-us/research/project/practical-system-verification)
-- **Verus Documentation**: [verus-lang.github.io/verus/guide](https://verus-lang.github.io/verus/guide/)
-- **Artifact Evaluation** for AutoVerus: [README-artifact-evaluation.md](README-artifact-evaluation.md)
+- AutoVerus: [arXiv:2409.13082](https://arxiv.org/abs/2409.13082)
+- VeruSAGE: [arXiv:2512.18436](https://arxiv.org/abs/2512.18436)
+- Verus guide: [verus-lang.github.io/verus/guide](https://verus-lang.github.io/verus/guide/)
 
 ---
 

@@ -3,14 +3,13 @@
 
 
 import argparse
-import json
 import logging
 import os
 
 from veval import verus
 
 import utils
-from utils import AttrDict
+from utils import AttrDict, load_config
 
 
 def main():
@@ -64,8 +63,7 @@ def main():
         logger.error("Input file does not exist")
         return
 
-    config = json.load(open(args.config))
-    config = AttrDict(config)
+    config = AttrDict(load_config(args.config))
     verus.set_verus_path(config.verus_path)
 
     # Config

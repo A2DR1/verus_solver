@@ -1,0 +1,22 @@
+verus_path: "/absolute/path/to/verus"
+repair_budget: 12
+max_candidates_per_step: 4
+strategy_order:
+  - dot_product
+  - reverse_template
+  - reverse_swap
+  - reverse_semantic
+  - reverse_step_lemma
+  - decreases
+  - slice_precond
+  - invariant
+  - overflow
+  - postcond
+  - type_repair
+use_llm_fallback: true
+model: "gpt-5"
+temperature: 1.0
+artifacts_root: "verus_solver_runs"
+multiple_errors: 3
+api_base: null
+

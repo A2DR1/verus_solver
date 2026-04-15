@@ -1,0 +1,14 @@
+error: postcondition not satisfied
+  --> /tmp/example.rs:20:1
+   |
+19 |           result as int == partial_dot(a@, b@, a@.len() as int),
+   |           ----------------------------------------------------- failed this postcondition
+20 | / {
+21 | |     let mut sum: u32 = 0;
+22 | |     for i in 0..a.len() {
+23 | |         sum += (a[i] as u32) * (b[i] as u32);
+24 | |     }
+25 | |     sum
+26 | | }
+   | |_^ at the end of the function body
+

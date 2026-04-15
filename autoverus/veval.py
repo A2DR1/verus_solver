@@ -77,6 +77,10 @@ class Verus:
         self.verus_path = None
 
     def set_verus_path(self, path):
+        if path is None:
+            self.verus_path = None
+            self.vstd_path = None
+            return
         self.verus_path = os.path.realpath(path)
         self.vstd_path = os.path.realpath(os.path.join(self.verus_path, "../../../vstd/"))
         # print(f"verus path: {self.verus_path}")
@@ -410,7 +414,7 @@ if __name__ == "__main__":
     import argparse
     import sys
 
-    from utils import AttrDict
+    from utils import AttrDict, load_config
 
     # Parse arguments
     parser = argparse.ArgumentParser(description="Verus Copilot")
@@ -425,8 +429,7 @@ if __name__ == "__main__":
         print("Config file does not exist", file=sys.stderr)
         exit(1)
 
-    config = json.load(open(args.config))
-    config = AttrDict(config)
+    config = AttrDict(load_config(args.config))
     verus.set_verus_path(config.verus_path)
 
     code = open(args.input).read()

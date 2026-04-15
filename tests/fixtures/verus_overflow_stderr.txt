@@ -1,0 +1,8 @@
+error: possible arithmetic underflow/overflow
+  --> /tmp/example.rs:23:16
+   |
+23 |         sum += (a[i] as u32) * (b[i] as u32);
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: aborting due to 1 previous error
+
