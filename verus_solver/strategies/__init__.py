@@ -8,6 +8,8 @@ from .reverse_swap import ReverseSwapStrategy
 from .reverse_semantic import ReverseSemanticStrategy
 from .reverse_step_lemma import ReverseStepLemmaStrategy
 from .slice_precond import SlicePrecondStrategy
+from .structural_loop_inv import StructuralLoopInvariantStrategy
+from .syntax_repair import SyntaxRepairStrategy
 from .type_repair import TypeRepairStrategy
 from .reverse_template import ReverseTemplateStrategy
 

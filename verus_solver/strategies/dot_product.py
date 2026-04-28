@@ -1,7 +1,7 @@
 from typing import List, Optional, Tuple
 
 from ..models import Candidate, VerusResult
-from .base import Strategy
+from .base import RecipeStrategy, Strategy
 
 
 DOT_LEMMA = """

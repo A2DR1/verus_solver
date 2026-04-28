@@ -4,7 +4,7 @@
         "https://api.openai.com/v1/"
     ],
     "aoai_api_version": "2024-12-01-preview",
-    "aoai_api_key": ["REDACTED"],
+    "aoai_api_key": ["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 "],
     "aoai_max_retries": 5,
     "max_token": 4096,
     "aoai_generation_model": "gpt-4o",
